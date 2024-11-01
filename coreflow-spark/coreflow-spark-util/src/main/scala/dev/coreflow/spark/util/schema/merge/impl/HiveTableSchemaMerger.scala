@@ -19,7 +19,7 @@ class HiveTableSchemaMerger extends SchemaMerger {
     addColumnsDDLStatements ++ updateDDLStatements
   }
 
-  protected def getAddColumnsDDLStatements
+  def getAddColumnsDDLStatements
   (
     currentSchema: EnrichedStructType,
     newSchema: EnrichedStructType,
@@ -38,7 +38,7 @@ class HiveTableSchemaMerger extends SchemaMerger {
   }
 
 
-  protected def getUpdateDDLStatements
+  def getUpdateDDLStatements
   (
     currentSchema: EnrichedStructType,
     newSchema: EnrichedStructType,
@@ -50,9 +50,9 @@ class HiveTableSchemaMerger extends SchemaMerger {
       .foldLeft(false: Boolean, Seq.empty[String]) {
         case ((changed, fields), (k, o)) =>
           newSchema.internalDataTypes.get(k).map {
-            case n if o >= n =>
+            case n if o.reduceToCompatibleDataType(n) == o =>
               (changed, fields :+ s"`$k`")
-            case n if o < n =>
+            case n =>
               (true, fields :+ s"CAST(`$k` AS ${n.toSparkDataType.sql}) AS `$k`")
           }.getOrElse(false, fields :+ s"`$k`")
       }
