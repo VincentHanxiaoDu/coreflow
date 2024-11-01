@@ -1,13 +1,13 @@
 package dev.coreflow.spark.etl.batch
 
-import dev.coreflow.spark.etl.batch.params.ReadPartitionParams
+import org.apache.spark.sql.{Column, DataFrame, SparkSession}
 
 import scala.collection.immutable.HashSet
 
 /**
  * <PartitionedTable> is a trait that represents a partitioned Spark table.
  */
-trait PartitionedTable[P <: ReadPartitionParams] extends ReadableTable {
+trait PartitionedTable extends ReadableTable {
   def partitionColumns: HashSet[String]
 
   /**
@@ -16,5 +16,14 @@ trait PartitionedTable[P <: ReadPartitionParams] extends ReadableTable {
    */
   def isPartitionSubset(columns: Set[String]): Boolean = {
     columns.subsetOf(partitionColumns)
+  }
+
+  /**
+   * @param filterColumn The filter column.
+   * @param spark        The SparkSession.
+   * @return The DataFrame that represents the table with the filter column.
+   */
+  def readPartitions(filterColumn: Column)(implicit spark: SparkSession): DataFrame = {
+    readTable().filter(filterColumn)
   }
 }

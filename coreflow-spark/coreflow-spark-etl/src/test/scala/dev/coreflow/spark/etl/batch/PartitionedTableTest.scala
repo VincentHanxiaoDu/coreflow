@@ -1,9 +1,9 @@
 package dev.coreflow.spark.etl.batch
 
-import dev.coreflow.spark.etl.batch.params.ReadPartitionParams
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.{Column, DataFrame, SparkSession, functions => F}
 import org.junit.jupiter.api.Assertions._
 import org.junit.jupiter.api.Test
+import org.mockito.ArgumentMatchers.{eq => eqTo}
 import org.mockito.Mock
 import org.mockito.Mockito._
 
@@ -18,12 +18,12 @@ class PartitionedTableTest {
   private val dataFrame: DataFrame = mock(classOf[DataFrame])
 
   @Mock
-  private val partitionedDataFrame: DataFrame = mock(classOf[DataFrame])
+  private val dataFramePartitions: DataFrame = mock(classOf[DataFrame])
 
   @Mock
-  private val readParams: ReadPartitionParams = mock(classOf[ReadPartitionParams])
+  private val column: Column = mock(classOf[Column])
 
-  private class ConcretePartitionedTable extends PartitionedTable[ReadPartitionParams] {
+  private class ConcretePartitionedTable extends PartitionedTable {
 
     override def readTable()(implicit spark: SparkSession): DataFrame = {
       spark.table(s"$tableName")
@@ -52,5 +52,19 @@ class PartitionedTableTest {
       Set("partition_column1", "partition_column2", "column3")))
     assertFalse(partitionedTable.isPartitionSubset(
       Set("column3")))
+  }
+
+
+  @Test
+  def testReadPartitions(): Unit = {
+    val partitionedTable = ConcretePartitionedTable()
+
+    when(dataFrame.filter(eqTo(F.col("partition_column1") === 1))).thenReturn(dataFramePartitions)
+    when(spark.table("table_name")).thenReturn(dataFrame)
+
+    val result = partitionedTable.readPartitions(F.col("partition_column1") === 1)(spark)
+
+    verify(dataFrame).filter(eqTo(F.col("partition_column1") === 1))
+    assertEquals(dataFramePartitions, result)
   }
 }
