@@ -11,5 +11,5 @@ trait WritableTable extends MaterializedTable {
   /**
    * @param spark The SparkSession.
    */
-  def writeFull()(implicit spark: SparkSession): Unit = {}
+  def writeFull()(implicit spark: SparkSession): Unit
 }
