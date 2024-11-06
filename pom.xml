@@ -21,7 +21,6 @@
 
   <modules>
     <module>coreflow-spark</module>
-    <module>coreflow-spark/coreflow-spark-util</module>
   </modules>
 
   <dependencyManagement>
