@@ -47,6 +47,7 @@
 
   <modules>
     <module>coreflow-spark-etl</module>
+    <module>coreflow-spark-util</module>
   </modules>
 
 </project>
