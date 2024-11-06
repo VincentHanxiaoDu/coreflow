@@ -16,7 +16,7 @@ class ReadableTableTest {
   private var dataFrame: DataFrame = _
 
   private case class ConcreteReadableTable(tableName: String)
-    extends ReadableTable {
+    extends ReadableTable[DataFrame] {
 
     override def readTable(implicit spark: SparkSession): DataFrame = {
       spark.table(s"$tableName")
