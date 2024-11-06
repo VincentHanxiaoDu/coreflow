@@ -10,5 +10,5 @@ trait ReadableTable extends LogicalTable {
    * @param spark The SparkSession.
    * @return The DataFrame that represents the table.
    */
-  def readTable()(implicit spark: SparkSession): DataFrame
+  def readTable(implicit spark: SparkSession): DataFrame
 }

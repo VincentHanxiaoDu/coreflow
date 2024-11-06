@@ -1,40 +1,65 @@
 package dev.coreflow.spark.etl.batch
 
 import org.apache.spark.sql.{DataFrame, SparkSession}
-import org.junit.jupiter.api.Test
-import org.mockito.Mock
+import org.junit.jupiter.api.Assertions.{assertThrows, assertTrue}
+import org.junit.jupiter.api.{BeforeEach, Test}
+import org.mockito.ArgumentMatchers.{eq => eqTo}
 import org.mockito.Mockito._
+import org.mockito.{Mock, MockitoAnnotations}
+
 
 class WritableTableTest {
 
   @Mock
-  private val spark: SparkSession = mock(classOf[SparkSession])
+  private var sparkSession: SparkSession = _
 
   @Mock
-  private val dataFrame: DataFrame = mock(classOf[DataFrame])
+  private var dataFrame: DataFrame = _
 
-  private class ConcreteWritableTable extends dev.coreflow.spark.etl.batch.WritableTable {
-    override def writeFull()(implicit spark: SparkSession): Unit = {}
+  private case class ConcreteWritableTable(tableDB: String, tableName: String)
+    extends dev.coreflow.spark.etl.batch.WritableTable {
 
-    override def tableName: String = "table_name"
-
-    override def tableDB: String = "table_db"
+    override def writeFull(implicit spark: SparkSession): Unit = {
+      spark.table(s"source_db.source_table")
+    }
   }
 
-  private object ConcreteWritableTable {
-    def apply(): ConcreteWritableTable = new ConcreteWritableTable
+  @BeforeEach
+  def setUp(): Unit = {
+    MockitoAnnotations.openMocks(this)
+    when(sparkSession.table(eqTo("source_db.source_table"))).thenReturn(dataFrame)
   }
+
 
   @Test
   def validWriteTableTest(): Unit = {
-    val table = ConcreteWritableTable()
-    table.writeFull()(spark)
+    val writableTable = ConcreteWritableTable("table_db", "table_name")
+    writableTable.writeFull(sparkSession)
+    verify(sparkSession).table("source_db.source_table")
   }
 
   @Test
   def implicitSparkSessionTest(): Unit = {
-    val table = ConcreteWritableTable()
-    implicit val impSpark: SparkSession = spark
-    table.writeFull()
+    val writableTable = ConcreteWritableTable("table_db", "table_name")
+    implicit val impSpark: SparkSession = sparkSession
+    writableTable.writeFull
+  }
+
+  @Test
+  def invalidTableDBTest(): Unit = {
+    val exception = assertThrows(
+      classOf[IllegalArgumentException],
+      () => ConcreteWritableTable("123invalid", "valid_table")
+    )
+    assertTrue(exception.getMessage.contains("Invalid database name"))
+  }
+
+  @Test
+  def invalidTableNameTest(): Unit = {
+    val exception = assertThrows(
+      classOf[IllegalArgumentException],
+      () => ConcreteWritableTable("valid_db", "123invalid")
+    )
+    assertTrue(exception.getMessage.contains("Invalid table name"))
   }
 }
