@@ -7,6 +7,7 @@ import scala.collection.mutable
 
 /**
  * Enriched data type for array values.
+ *
  * @param elementDataType The enriched type for elements of the array.
  */
 @SerialVersionUID(4714343744563410534L)
@@ -45,5 +46,9 @@ object EnrichedArrayType {
 
   def apply(elementDataType: EnrichedDataType): EnrichedArrayType = {
     instances.getOrElseUpdate(elementDataType, new EnrichedArrayType(elementDataType))
+  }
+
+  def apply(arrayDataType: ArrayType): EnrichedArrayType = {
+    EnrichedArrayType(EnrichedDataType.fromSparkDataType(arrayDataType.elementType))
   }
 }

@@ -58,4 +58,11 @@ object EnrichedMapType {
   def apply(keyType: EnrichedDataType, valueType: EnrichedDataType): EnrichedMapType = {
     instances.getOrElseUpdate((keyType, valueType), new EnrichedMapType(keyType, valueType))
   }
+
+  def apply(mapDataType: MapType): EnrichedMapType = {
+    EnrichedMapType(
+      EnrichedDataType.fromSparkDataType(mapDataType.keyType),
+      EnrichedDataType.fromSparkDataType(mapDataType.valueType)
+    )
+  }
 }

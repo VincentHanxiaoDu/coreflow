@@ -129,14 +129,10 @@ object EnrichedDataType {
       case LongType => EnrichedLongType
       case DoubleType => EnrichedDoubleType
       case StringType => EnrichedStringType
-      case d: DecimalType => EnrichedDecimalType(d.precision, d.scale)
-      case a: ArrayType =>
-        EnrichedArrayType(fromSparkDataType(a.elementType))
-      case m: MapType =>
-        EnrichedMapType(fromSparkDataType(m.keyType), fromSparkDataType(m.valueType))
-      case s: StructType =>
-        EnrichedStructType(ListMap(s.fields.map(field => field.name ->
-          fromSparkDataType(field.dataType)): _*))
+      case d: DecimalType => EnrichedDecimalType(d)
+      case a: ArrayType => EnrichedArrayType(a)
+      case m: MapType => EnrichedMapType(m)
+      case s: StructType => EnrichedStructType(s)
       case _ => throw UnsupportedDataTypeException(dataType)
     }
   }

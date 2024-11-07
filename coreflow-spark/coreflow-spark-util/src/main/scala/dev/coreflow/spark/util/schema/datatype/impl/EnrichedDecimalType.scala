@@ -51,4 +51,8 @@ object EnrichedDecimalType {
   def apply(precision: Int, scale: Int): EnrichedDecimalType = {
     instances.getOrElseUpdate((precision, scale), new EnrichedDecimalType(precision, scale))
   }
+
+  def apply(sparkDecimalType: DecimalType): EnrichedDecimalType = {
+    EnrichedDecimalType(sparkDecimalType.precision, sparkDecimalType.scale)
+  }
 }

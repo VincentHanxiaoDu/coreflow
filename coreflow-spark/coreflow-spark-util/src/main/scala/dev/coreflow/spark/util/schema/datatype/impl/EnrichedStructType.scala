@@ -64,4 +64,12 @@ object EnrichedStructType {
   def apply(internalDataTypes: Map[String, EnrichedDataType]): EnrichedStructType = {
     apply(ListMap(internalDataTypes.toSeq: _*))
   }
+
+  def apply(structDataType: StructType): EnrichedStructType = {
+    EnrichedStructType(
+      ListMap(structDataType.map {
+        case StructField(name, dataType, _, _) => name -> EnrichedDataType.fromSparkDataType(dataType)
+      }: _*)
+    )
+  }
 }
