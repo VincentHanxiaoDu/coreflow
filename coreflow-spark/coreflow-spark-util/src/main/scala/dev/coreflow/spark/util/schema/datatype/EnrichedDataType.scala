@@ -4,8 +4,6 @@ import dev.coreflow.spark.util.schema.datatype.exceptions._
 import dev.coreflow.spark.util.schema.datatype.impl._
 import org.apache.spark.sql.types._
 
-import scala.collection.immutable.ListMap
-
 /**
  * Enriched data type for finding suitable data types for Spark dataframes.
  */
