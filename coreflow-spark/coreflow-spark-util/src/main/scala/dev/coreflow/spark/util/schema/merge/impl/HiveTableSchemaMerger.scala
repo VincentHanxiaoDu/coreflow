@@ -3,7 +3,7 @@ package dev.coreflow.spark.util.schema.merge.impl
 import dev.coreflow.spark.util.schema.datatype.impl.EnrichedStructType
 import dev.coreflow.spark.util.schema.merge.SchemaMerger
 
-class HiveTableSchemaMerger extends SchemaMerger {
+case object HiveTableSchemaMerger extends SchemaMerger {
   override def getUpdateSQLStatements
   (
     currentSchema: EnrichedStructType,

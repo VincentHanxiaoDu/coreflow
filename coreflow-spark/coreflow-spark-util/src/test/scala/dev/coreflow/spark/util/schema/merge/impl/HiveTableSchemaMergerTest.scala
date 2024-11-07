@@ -36,11 +36,9 @@ class HiveTableSchemaMergerTest {
     )
   )
 
-  val schemaMerger = new HiveTableSchemaMerger
-
   @Test
   def testGetAddColumnsDDLStatementsWithNewColumns(): Unit = {
-    val addColumnsDDL = schemaMerger.getAddColumnsDDLStatements(currentSchema,
+    val addColumnsDDL = HiveTableSchemaMerger.getAddColumnsDDLStatements(currentSchema,
       newSchemaWithNewColumns, tableIdentifier)
 
     assertEquals(
@@ -52,14 +50,15 @@ class HiveTableSchemaMergerTest {
 
   @Test
   def testGetAddColumnsDDLStatementsWithoutNewColumns(): Unit = {
-    val addColumnsDDL = schemaMerger.getAddColumnsDDLStatements(currentSchema, currentSchema,
+    val addColumnsDDL = HiveTableSchemaMerger.getAddColumnsDDLStatements(currentSchema,
+      currentSchema,
       tableIdentifier)
     assertTrue(addColumnsDDL.isEmpty, "Expected no ADD COLUMNS statement when no new columns exist")
   }
 
   @Test
   def testGetUpdateDDLStatementsWithChangedFields(): Unit = {
-    val updateDDL = schemaMerger.getUpdateDDLStatements(currentSchema,
+    val updateDDL = HiveTableSchemaMerger.getUpdateDDLStatements(currentSchema,
       newSchemaWithUpdatedColumns, tableIdentifier, tempTableIdentifier, partitionColumns)
 
     assertEquals(
@@ -79,7 +78,7 @@ class HiveTableSchemaMergerTest {
 
   @Test
   def testGetUpdateDDLStatementsWithoutChangedFields(): Unit = {
-    val updateDDL = schemaMerger.getUpdateDDLStatements(currentSchema, currentSchema,
+    val updateDDL = HiveTableSchemaMerger.getUpdateDDLStatements(currentSchema, currentSchema,
       tableIdentifier, tempTableIdentifier, partitionColumns)
     assertTrue(updateDDL.isEmpty, "Expected no update DDL statements when no fields have changed")
   }
@@ -87,8 +86,8 @@ class HiveTableSchemaMergerTest {
 
   @Test
   def testGetUpdateSQLStatementsWithoutNewColumnsOrChanges(): Unit = {
-    val updateSQLStatements = schemaMerger.getUpdateSQLStatements(currentSchema, currentSchema,
-      tableIdentifier, tempTableIdentifier, partitionColumns)
+    val updateSQLStatements = HiveTableSchemaMerger.getUpdateSQLStatements(currentSchema,
+      currentSchema, tableIdentifier, tempTableIdentifier, partitionColumns)
     assertTrue(updateSQLStatements.isEmpty, "Expected no SQL statements when there are no new " +
       "columns or schema changes")
   }

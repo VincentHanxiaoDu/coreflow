@@ -8,7 +8,7 @@ import org.apache.spark.rdd.RDD
 /**
  * A schema generator that infers the schema from a map of values with column names as keys.
  */
-case class MapSchemaGenerator() extends SchemaGenerator {
+case object MapSchemaGenerator extends SchemaGenerator {
   override def getInferredSchema(rdd: RDD[Map[String, _]]): EnrichedStructType = {
     rdd.map {
       EnrichedDataType.fromValue
