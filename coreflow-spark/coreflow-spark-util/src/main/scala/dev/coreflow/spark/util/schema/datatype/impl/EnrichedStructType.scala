@@ -41,6 +41,7 @@ class EnrichedStructType(val internalDataTypes: ListMap[String, EnrichedDataType
 
   override def reduceToCompatibleDataType(that: EnrichedDataType): EnrichedDataType = {
     that match {
+      case m: EnrichedStructType if this == m => this
       case m: EnrichedStructType =>
         val internalDataTypesUpdated = internalDataTypes.map {
           case (k, valueDataType) => k -> m.internalDataTypes.get(k)
@@ -52,6 +53,13 @@ class EnrichedStructType(val internalDataTypes: ListMap[String, EnrichedDataType
       case _ => super.reduceToCompatibleDataType(that)
     }
   }
+
+  override def equals(obj: Any): Boolean = obj match {
+    case s: EnrichedStructType => this.internalDataTypes == s.internalDataTypes
+    case _ => false
+  }
+
+  override def hashCode(): Int = internalDataTypes.##
 }
 
 object EnrichedStructType {

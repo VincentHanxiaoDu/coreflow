@@ -30,6 +30,7 @@ class EnrichedDecimalType(val precision: Int, val scale: Int) extends EnrichedDa
 
   override def reduceToCompatibleDataType(that: EnrichedDataType): EnrichedDataType = {
     that match {
+      case d: DecimalType if this == d => this
       case d: DecimalType =>
         EnrichedDecimalType(this.precision max d.precision, this.scale max d.scale)
       case _ => super.reduceToCompatibleDataType(that)

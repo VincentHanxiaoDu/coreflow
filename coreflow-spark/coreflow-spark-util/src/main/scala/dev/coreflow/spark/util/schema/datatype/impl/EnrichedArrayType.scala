@@ -27,6 +27,7 @@ class EnrichedArrayType(val elementDataType: EnrichedDataType) extends EnrichedD
 
   override def reduceToCompatibleDataType(that: EnrichedDataType): EnrichedDataType = {
     that match {
+      case a: EnrichedArrayType if this == a => this
       case a: EnrichedArrayType =>
         EnrichedArrayType(elementDataType.reduceToCompatibleDataType(a.elementDataType))
       case _ => super.reduceToCompatibleDataType(that)

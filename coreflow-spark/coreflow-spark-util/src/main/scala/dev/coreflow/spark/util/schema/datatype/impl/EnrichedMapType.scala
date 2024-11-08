@@ -35,6 +35,7 @@ class EnrichedMapType(val keyType: EnrichedDataType, val valueType: EnrichedData
 
   override def reduceToCompatibleDataType(that: EnrichedDataType): EnrichedDataType = {
     that match {
+      case m: EnrichedMapType if this == m => this
       case m: EnrichedMapType =>
         EnrichedMapType(
           keyType.reduceToCompatibleDataType(m.keyType),
