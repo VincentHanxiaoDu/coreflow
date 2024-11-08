@@ -76,7 +76,8 @@ object EnrichedStructType {
   def apply(structDataType: StructType): EnrichedStructType = {
     EnrichedStructType(
       ListMap(structDataType.map {
-        case StructField(name, dataType, _, _) => name -> EnrichedDataType.fromSparkDataType(dataType)
+        case StructField(name, dataType, _, _) => name ->
+          EnrichedDataType.fromSparkDataType(dataType)
       }: _*)
     )
   }
