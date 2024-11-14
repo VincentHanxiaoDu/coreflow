@@ -11,7 +11,7 @@ import scala.collection.mutable
  * @param elementDataType The enriched type for elements of the array.
  */
 @SerialVersionUID(4714343744563410534L)
-class EnrichedArrayType(val elementDataType: EnrichedDataType) extends EnrichedDataType {
+class EnrichedArrayType private (val elementDataType: EnrichedDataType) extends EnrichedDataType {
 
   final override def typeCompatibility: Int = 7
 

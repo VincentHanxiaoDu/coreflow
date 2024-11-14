@@ -13,7 +13,7 @@ import scala.collection.mutable
  * @param internalDataTypes The data types of the struct fields.
  */
 @SerialVersionUID(3693789401695146023L)
-class EnrichedStructType(val internalDataTypes: ListMap[String, EnrichedDataType])
+class EnrichedStructType private (val internalDataTypes: ListMap[String, EnrichedDataType])
   extends EnrichedDataType {
   final override def typeCompatibility: Int = 8
 

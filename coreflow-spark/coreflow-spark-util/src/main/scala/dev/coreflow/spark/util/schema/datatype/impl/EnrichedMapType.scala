@@ -12,8 +12,8 @@ import scala.collection.mutable
  * @param valueType The data type of the map values.
  */
 @SerialVersionUID(5313309701105084002L)
-class EnrichedMapType(val keyType: EnrichedDataType, val valueType: EnrichedDataType) extends
-  EnrichedDataType {
+class EnrichedMapType private (val keyType: EnrichedDataType, val valueType: EnrichedDataType)
+  extends EnrichedDataType {
 
   final override def typeCompatibility: Int = 9
 

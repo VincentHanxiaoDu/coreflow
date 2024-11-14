@@ -4,6 +4,9 @@ import dev.coreflow.spark.util.schema.datatype.exceptions._
 import dev.coreflow.spark.util.schema.datatype.impl._
 import org.apache.spark.sql.types._
 
+import java.sql.Timestamp
+import java.time.Instant
+
 /**
  * Enriched data type for finding suitable data types for Spark dataframes.
  */
@@ -112,6 +115,8 @@ object EnrichedDataType {
         }.getOrElse(handleMapType(m))
       case s: Seq[_] => handleArrayType(s)
       case a: Array[_] => handleArrayType(a.toSeq)
+      case _: Timestamp => EnrichedTimestampType
+      case _: Instant => EnrichedTimestampType
     }.getOrElse(minPreferenceDataType)
   }
 
@@ -131,6 +136,7 @@ object EnrichedDataType {
       case a: ArrayType => EnrichedArrayType(a)
       case m: MapType => EnrichedMapType(m)
       case s: StructType => EnrichedStructType(s)
+      case t: TimestampType => EnrichedTimestampType
       case _ => throw UnsupportedDataTypeException(dataType)
     }
   }

@@ -11,7 +11,7 @@ import scala.collection.mutable
  * @param scale The scale of the decimal.
  */
 @SerialVersionUID(1728954167345109600L)
-class EnrichedDecimalType(val precision: Int, val scale: Int) extends EnrichedDataType {
+class EnrichedDecimalType private (val precision: Int, val scale: Int) extends EnrichedDataType {
 
   final override def typeCompatibility: Int = 5
 
