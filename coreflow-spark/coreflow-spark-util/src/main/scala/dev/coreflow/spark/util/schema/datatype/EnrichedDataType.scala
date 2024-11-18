@@ -102,6 +102,7 @@ object EnrichedDataType {
       case _: Boolean => EnrichedBooleanType
       case _: Int => EnrichedIntegerType
       case _: Long => EnrichedLongType
+      case _: BigInt => EnrichedLongType
       case _: Double => EnrichedDoubleType
       case _: String => EnrichedStringType
       case d: BigDecimal => EnrichedDecimalType(d.precision, d.scale)
