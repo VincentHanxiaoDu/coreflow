@@ -89,6 +89,9 @@ object EnrichedDataType {
    * @return The enriched array type inferred from the array.
    */
   private def handleArrayType(a: Seq[_]): EnrichedArrayType = {
+    if (a.isEmpty) {
+      return EnrichedArrayType(minPreferenceDataType)
+    }
     val elementDataType = a.map(fromValue).reduce(_ reduceToCompatibleDataType _)
     EnrichedArrayType(elementDataType)
   }
@@ -133,11 +136,11 @@ object EnrichedDataType {
       case LongType => EnrichedLongType
       case DoubleType => EnrichedDoubleType
       case StringType => EnrichedStringType
+      case TimestampType => EnrichedTimestampType
       case d: DecimalType => EnrichedDecimalType(d)
       case a: ArrayType => EnrichedArrayType(a)
       case m: MapType => EnrichedMapType(m)
       case s: StructType => EnrichedStructType(s)
-      case t: TimestampType => EnrichedTimestampType
       case _ => throw UnsupportedDataTypeException(dataType)
     }
   }
